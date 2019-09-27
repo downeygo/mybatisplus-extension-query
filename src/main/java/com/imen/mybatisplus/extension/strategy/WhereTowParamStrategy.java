@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * @author wfee
  */
-public class WhereTowParamStrategy extends QueryStrategyAdapter {
+public class WhereTowParamStrategy extends AbstractQueryStrategy {
     public WhereTowParamStrategy(QueryCondition queryCondition, QueryWrapper<?> queryWrapper, String column, Object[] values) {
         super(queryCondition, queryWrapper, column, values);
     }
@@ -25,8 +25,7 @@ public class WhereTowParamStrategy extends QueryStrategyAdapter {
     }
 
     @Override
-    protected boolean invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    protected void invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         getMethod().invoke(getQueryWrapper(), getColumn(), getValues()[0], getValues()[1]);
-        return true;
     }
 }

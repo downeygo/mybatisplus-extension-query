@@ -21,12 +21,11 @@ public class SortStrategy extends QueryStrategyAdapter {
 
     @Override
     protected Method getMethod() throws NoSuchMethodException {
-        return getQueryWrapper().getClass().getMethod(getQueryCondition().getName(), Object[].class);
+        return getQueryWrapperClass().getMethod(getQueryCondition().getName(), Object[].class);
     }
 
     @Override
-    protected boolean invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    protected void invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         getMethod().invoke(getQueryWrapper(), (Object) getValues());
-        return true;
     }
 }

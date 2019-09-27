@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://101.200.32.149:3306/lms?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: ZTWFEE

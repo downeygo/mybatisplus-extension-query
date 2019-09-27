@@ -22,7 +22,7 @@ public class DynamicQuery {
         QueryWrapper<?> queryWrapper = Wrappers.query();
         param.entrySet().stream().forEach(x -> {
             if (!x.getKey().equals(SIZE) && !x.getKey().equals(CURRENT)) {
-                QueryCondition queryCondition = this.determineQueryCondition(x.getKey());
+                QueryCondition queryCondition = determineQueryCondition(x.getKey());
                 QueryContext.initQueryWrapper(queryWrapper, clazz, queryCondition, column, convertQueryValues(x.getValue()));
             }
 
@@ -52,9 +52,9 @@ public class DynamicQuery {
         QueryCondition queryCondition = QueryCondition.getQueryConditionByName(name);
         if (queryCondition == null) {
             throw new QueryConditionInvalidException("query condition " + name + " is invalid");
-        } else {
-            return queryCondition;
         }
+        return queryCondition;
+
     }
 
     private Object[] convertQueryValues(Object values) {

@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 /**
  * @author wfee
  */
-public abstract class QueryStrategyAdapter implements QueryStrategy {
+public abstract class AbstractQueryStrategy implements QueryStrategy {
     private QueryCondition queryCondition;
     private String column;
     private Object[] values;
     private QueryWrapper<?> queryWrapper;
 
-    public QueryStrategyAdapter(QueryCondition queryCondition, QueryWrapper<?> queryWrapper, String column, Object[] values) {
+    public AbstractQueryStrategy(QueryCondition queryCondition, QueryWrapper<?> queryWrapper, String column, Object[] values) {
         this.queryCondition = queryCondition;
         this.queryWrapper = queryWrapper;
         this.column = column;
@@ -47,6 +47,10 @@ public abstract class QueryStrategyAdapter implements QueryStrategy {
         return queryWrapper;
     }
 
+    public Class<? extends QueryWrapper> getQueryWrapperClass() {
+        return queryWrapper.getClass();
+    }
+
     @Override
     public QueryWrapper<?> initQueryWrapper(Class<?> clazz) {
         if (!isExistColumns(clazz, getMapperColumns())) {
@@ -64,11 +68,30 @@ public abstract class QueryStrategyAdapter implements QueryStrategy {
         return queryWrapper;
     }
 
+    /**
+     * 获取mapperColumns
+     *
+     * @return
+     */
     protected abstract Object[] getMapperColumns();
 
+    /**
+     * 获取对应的方法
+     *
+     * @return
+     * @throws NoSuchMethodException
+     */
     protected abstract Method getMethod() throws NoSuchMethodException;
 
-    protected abstract boolean invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    /**
+     * 调用对应的方法
+     *
+     * @return
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    protected abstract void invokeMethod() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     private boolean isExistColumns(Class<?> clazz, Object[] column) {
         return getAllColumns(clazz).containsAll(Arrays.asList(column));
@@ -100,9 +123,10 @@ public abstract class QueryStrategyAdapter implements QueryStrategy {
 
     private boolean invokeQueryMethod() {
         try {
-            return invokeMethod();
+            invokeMethod();
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             return false;
         }
+        return true;
     }
 }
